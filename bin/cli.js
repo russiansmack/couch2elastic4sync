@@ -83,8 +83,14 @@ function getLogFile (config) {
 function getSince (config, cb) {
   if (config.since) return cb(null, config.since)
   jsonist.get(config.seq_url, function (err, data) {
-    if (err) return cb(err)
-    var seq = selectn('idx-edm-v5.mappings.seq._meta.seq', data)
+    if (err) {
+      return cb(err);
+    }
+
+    //when there is no `seq` it just means it's a brand new index
+    if(Object.keys(data).length === 0 && JSON.stringify(data) === JSON.stringify({})) return cb(null, "0");
+
+    var seq = selectn(url.parse(config.elasticsearch).pathname.split('/')[1] + '.mappings.seq._meta.seq', data)
     if (!seq) return cb('no seq number in elasticsearch at ' + config.seq_url)
     return cb(null, seq)
   })
