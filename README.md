@@ -24,6 +24,15 @@ To keep a sync process going, run
 
     couch2elastic4sync
 
+To run all the configs in the folder simultaniously and log into files
+
+    for i in *; do nohup couch2elastic4sync --config $i > ../$i.log & done
+  
+## Sample Config 
+
+    database=http://localhost:5984/blueprint
+    elasticsearch=http://localhost:9200/bpforms/submission
+    couchdbfilter=typeFilters/formses
 
 ## License
 
